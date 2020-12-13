@@ -1,5 +1,5 @@
 theme: jekyll-theme-hacker
 deploy:
   type: git
-  repo:  https://github.com/wjlpersonal/wjlpersonal.github.io.git
+  repository: git@github.com:wjlpersonal/wjlpersonal.github.io.git
   branch: master
