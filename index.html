@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-GCN" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/08/GCN/" class="article-date">
+  <time class="dt-published" datetime="2023-11-08T03:48:02.000Z" itemprop="datePublished">2023-11-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/08/GCN/">GCN.md</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p><strong>图的矩阵</strong></p>
+<p>$A \in R^{N \times N}，表示$图的邻接矩阵，$A_{i,j}表示$节点$i,j之间的边$权重。</p>
+<p>$D_{ii} &#x3D; \sum_{j}^{}A_{ij}表示$图的度矩阵，只有对角线有元素，表示节点的度。</p>
+<p>$\Delta &#x3D; D - A，$定义为图的Laplacian矩阵</p>
+<p>在图上定义的卷积网络问题在很早就被广泛讨论，本篇论文被称为GCN的开山之作，$在早期工作中的$损失函数定义为：</p>
+<p>$$<br>L &#x3D; L_{0} + \lambda L_{reg}\<br>L_{reg} &#x3D; \sum_{i,j}^{}{A_{i,j}\left| f\left( X_{i} \right) - f\left( X_{j} \right) \right|^{2} &#x3D; f(X)^{T}\Delta f(X)}<br>$$<br>$L_{0}$表示数据中带有监督的数据损失，也就是和标签不同的预测损失。$L_{reg}$表示基于图Laplacian矩阵的正则系数。</p>
+<p>其中$X_{i}$表示一个表示节点特征的矩阵，$f( \cdot )代表$神经网络表示的可微分函数。</p>
+<p>图卷积的公式如下</p>
+<p>$$<br>H^{l + 1} &#x3D; \sigma\left( {\widetilde{D} }^{- \frac{1}{2} }\ \widetilde{A}{\widetilde{D} }^{- \frac{1}{2} }H^{l}W^{l} \right)<br>$$<br>其中$H^{l}表示第l$层的激活矩阵，$\sigma( \cdot )表示激活函数例如$ReLU，而$W^{l}$表示一个可以训练学习的权重矩阵。</p>
+<p>而$\widetilde{A} &#x3D; A + I_{N}表示添加自连接$的邻接矩阵，$\widetilde{D}表示$添加自连接后的度矩阵，整个${\widetilde{D} }^{- \frac{1}{2} }\ \widetilde{A}{\widetilde{D} }^{- \frac{1}{2} }可以$视为一个能直接通过邻接矩阵求得的矩阵，可以视为一个固定的系数。</p>
+<p>如何理解${\widetilde{D} }^{- \frac{1}{2} }\ \widetilde{A}{\widetilde{D} }^{- \frac{1}{2} }$? 从Laplacian矩阵开始。</p>
+<p>Laplacian$算子定义为梯度的散度：\ \mathrm{\Delta}u{&#x3D; \nabla(\nabla u) &#x3D; \ \nabla}^{2}u$</p>
+<p>梯度$\nabla f &#x3D; \frac{\sum\partial f}{\partial x_{i} }\ \overrightarrow{e_{i} }$，对每个方向的变化速度求导，表示不同方向的增长速度，相加后表示变化最快的方向和速率，是一个矢量。</p>
+<p>散度$\nabla \vec{f} &#x3D; \lbrack\frac{\partial}{\partial x_{1} })$<em>,</em> $\partial&#x2F;(\partial x_ 2\ ),\ldots,\partial&#x2F;(\partial x_ n\ )\rbrack \cdot f\ \vec{} &#x3D; \sum(\partial f\ \vec{}_ i)&#x2F;(\partial x_ i\ )$，表示某个点邻域内的向量通量大小，是通过$\nabla\overrightarrow{f} &#x3D; \frac{\lim_{n \rightarrow \infty}1}{V\oint\overrightarrow{A} } \cdot \overrightarrow{f}dS通过$高斯公式简化而来，散度是一个标量。</p>
+<p>散度通常用于表达一个矢量场内的有源性。例如一个热力场，空间中点的温度是标量，而对温度求梯度，得到梯度场，是表示热量分布和流向的矢量场。</p>
+<p>而对温度梯度场求散度，则可以表示每一点是热量流入流出的大小，也就是该点和邻域的差值。</p>
+<p>因此Laplacian$算子具有这样的性质：\ \mathrm{\Delta}u \propto \overline{u(x)} - u(x)$</p>
+<p>具体来说，多维的$Laplacian算子可以写为：\ \Delta f &#x3D; \sum_{i &#x3D; 1}^{n}\frac{\partial^{2}f}{\partial x_{i}^{2} }$</p>
+<p>而假如使用差分来近似表示二维的Laplacian算子，得到这样的一个结果：</p>
+<p>$$<br>\mathrm{\Delta}f &#x3D; \frac{\partial f}{\partial x^{2} } + \frac{\partial f}{\partial y^{2} }&#x3D; \frac{f(x + \mathrm{\Delta}x,y) + f(x - \mathrm{\Delta}x,y) - 2f}{(\mathrm{\Delta}x)^{2} } + \frac{f(x,y + \mathrm{\Delta}y) + f(x,y - \mathrm{\Delta}y) - 2f}{(\mathrm{\Delta}y)^{2} }<br>$$</p>
+<p>如果在一个矩阵中采样，假设矩阵中上下左右距离为1，也就是$\mathrm{\Delta}x &#x3D; \mathrm{\Delta}y &#x3D; 1$,</p>
+<p>$\mathrm{\Delta}f &#x3D; f\left( x_{+ 1},y \right) + f\left( x_{- 1},y \right)” + \ &#96;&#96;\ f\left( x,y_{+ 1} \right) + f\left( x,y_{- 1} \right) - 4f(x,y)$</p>
+<p>记为$\mathrm{\Delta}f &#x3D; \sum_{ {j \in N}<em>{i} }^{}\left( f</em>{i} - f_{j} \right)$，$N_{i}$表示邻域四个点</p>
+<p>对于$\mathrm{\Delta}f &#x3D; \sum_{ {j \in N}<em>{i} }^{}{\left( f</em>{i} - f_{j} \right)\ }$ ，如果对图的邻接矩阵进行计算，则表示每个顶点的函数值，同时$N_{i}也推广$到顶点的所有邻居节点，并且每次差分还应该考虑边的权重，因此可以类似地推广到：</p>
+<p>$$<br>\mathrm{\Delta}f_{i} &#x3D; \sum_{j \in N_{i} }^{}{A_{ij}\left( f_{i} - f_{j} \right) &#x3D; \sum_{j \in V}^{}{A_{ij}f_{i} } } - \sum_{j \in V}^{}{A_{ij}f_{j} &#x3D; d_{i}f_{i} - A_{i}V}<br>$$</p>
+<p>其中的$A_{i}V$表示邻接矩阵的第$i$行和顶点向量的内积。</p>
+<p>对于所有的顶点，可以得到下列公式：</p>
+<p>$$<br>\mathrm{\Delta}f &#x3D; \begin{bmatrix}<br>d_{1}f_{1} - A_{1}V \<br>\ldots \<br>d_{n}f_{n} - A_{n}<br>\end{bmatrix} &#x3D; \begin{bmatrix}<br>d_{1} &amp; &amp; \<br> &amp; \ldots &amp; \<br> &amp; &amp; d_{n}<br>\end{bmatrix}\begin{bmatrix}<br>f_{1} \<br>\ldots \<br>f_{n}<br>\end{bmatrix} - \begin{bmatrix}<br>A_{1} \<br>\ldots \<br>A_{n}<br>\end{bmatrix}\begin{bmatrix}<br>f_{1} \<br>\ldots \<br>f_{n}<br>\end{bmatrix} &#x3D; (D - A)V<br>$$</p>
+<p>因此图的Laplacian公式如下：</p>
+<p>$$<br>\mathrm{\Delta}f &#x3D; (D - A)V &#x3D; LV<br>$$</p>
+<p>物理含义就是描述了每个顶点对他所有邻居节点的差分大小。</p>
+<p>而由于反复迭代需要保证Laplacian的归一化，同时Laplacian还是一个对称的半正定矩阵，因此采用了这样的对称归一化形式：</p>
+<p>$$<br>L^{‘} &#x3D; D^{- \frac{1}{2} }LD^{- \frac{1}{2} } &#x3D; I_{N}{- D}^{- \frac{1}{2} }AD^{- \frac{1}{2} }<br>$$</p>
+<p>$论文中使用的是添加了自环的形式\widetilde{A} &#x3D; A + I_{N}$，这是考虑到图的信息在传递时必须考虑自身信息。</p>
+<p>傅里叶变换的定义为：</p>
+<p>$$<br>F(\omega) &#x3D; F\left\lbrack f(t) \right\rbrack &#x3D; \int f(t)e^{- i\omega t}dt<br>$$</p>
+<p>其中$e^{- i\omega t}被称为$基函数， $f(t)称为信号$。而从矩阵分析的角度来考虑，选择$e^{- i\omega t}$作为基函数是因为他符合特征方程的形式：</p>
+<p>$$<br>Av &#x3D; \lambda v<br>$$</p>
+<p>对于Laplacian算子来说，$\mathrm{\Delta}e^{- i\omega t} &#x3D; \frac{\partial^{2} }{\partial t^{2} }e^{- i\omega t} &#x3D; - \omega^{2}e^{- i\omega t}$，恰好符合矩阵变换的形式，所以$e^{- i\omega t}$就是常规Laplacian算子的特征函数。</p>
+<p>当Laplacian算子扩展到矩阵形式时，将傅里叶变换离散化：</p>
+<p>$$<br>F\left( \lambda_{l} \right) &#x3D; \ \widehat{f}\left( \lambda_{l} \right) &#x3D; \sum_{i &#x3D; 1}^{N}{f(i)u_{l}^{*}(i)}<br>$$</p>
+<p>这里将信号变成了图中每个顶点的函数值，基函数是Laplacian算子的特征向量</p>
+<p>$$<br>F\left( \lambda_{l} \right) &#x3D; \sum_{i &#x3D; 1}^{N}{f(i)u_{l}(i)}<br>$$</p>
+<p>其中$f(i)表示$第$i个$顶点的函数值，$u_{l}(i)表示第l个特征向量$对第$i个$顶点的值,$\lambda_{l}$表示第$l个$特征值，对应于常规傅里叶中的频率。</p>
+<p>对于图里的每个顶点，变为向量形式：</p>
+<p>$$<br>F(f) &#x3D; \begin{bmatrix}<br>F\left( \lambda_{1} \right) \<br>\ldots \<br>F\left( \lambda_{N} \right)<br>\end{bmatrix} &#x3D; \left\lbrack {\overrightarrow{u} }<em>{1},\ldots{\overrightarrow{u} }</em>{N} \right\rbrack^{T}\begin{bmatrix}<br>f(1) \<br>\ldots \<br>f(N)<br>\end{bmatrix}<br>F(f) &#x3D; U^{T}f<br>$$</p>
+<p>同理，$f函数$在图上进行傅里叶逆变换就是:</p>
+<p>$$<br>f &#x3D; UF(f)<br>$$</p>
+<p>普通的卷积的定义是，对两个函数的傅里叶变换乘积，再逆变换：</p>
+<p>$$<br>f*h &#x3D; F^{- 1}\left\lbrack \widehat{f}(\omega)\widehat{h}(\omega) \right\rbrack<br>$$</p>
+<p>而对于函数$h，$傅里叶变化设定为：</p>
+<p>$$<br>\widehat{h} &#x3D; \sum_{i &#x3D; 1}^{N}{h(i)u_{l}(i)}<br>$$</p>
+<p>因此在图上对两个函数进行卷积就变成了：</p>
+<p>$$<br>f*h &#x3D; U\begin{bmatrix}<br>\widehat{h}\left( \lambda_{1} \right) &amp; &amp; \<br> &amp; \ldots &amp; \<br> &amp; &amp; \widehat{h}\left( \lambda_{N} \right)<br>\end{bmatrix}U^{T}f<br>$$</p>
+<p>对于一个信号$x \in R^{N}，$也就是节点的feature，以及一个滤波器$g_{\theta}:$</p>
+<p>$$<br>g_{\theta}*x &#x3D; Ug_{\theta}U^{T}x<br>$$</p>
+<p>这里$\theta 表示$一个由参数组成的向量，而$g_{\theta}是$它张成的一个对角矩阵$diag(\theta)$</p>
+<p>因为$\theta 通常$也是$\Lambda 求得$的参数，所以可以记为$g(\Lambda)$</p>
+<p>但是上面这个公式计算量非常大，求解$U需要O\left( N^{2} \right)的$复杂度，所以采用了一种基于Chebyshev多项式的近似方法：</p>
+<p>$$<br>g(\Lambda) &#x3D; \sum_{k &#x3D; 0}^{K}{\theta_{k}T_{K}\left( \widetilde{\Lambda} \right)}<br>$$</p>
+<p>其中$\widetilde{\Lambda} &#x3D; \frac{2\Lambda}{\lambda_{\max{- I_{N} } } }，$ $\lambda_{\max}$Laplacian的谱半径（最大的特征值），这里将特征向量矩阵进行了缩放，从而满足Chebyshev多项式的近似区间[-1,1]</p>
+<p>$\theta 是$切比雪夫系数</p>
+<p>Chebyshev多项式可以递归地计算出来：</p>
+<p>$$<br>T_{k}(x) &#x3D; 2xT_{k - 1}(x) - T_{k - 2}(x),\ \ \ \ \ T_{0}(x) &#x3D; 1,\ T_{1}(x) &#x3D; x<br>$$</p>
+<p>带入卷积公式如下：</p>
+<p>$$<br>g_{\theta}*x &#x3D; U\sum_{k &#x3D; 0}^{K}{\theta_{k}T_{K}\left( \widetilde{A} \right)U^{T}x}<br>$$</p>
+<p>将图中的每个$U,U^{T}代入到\widetilde{A}$旁边，可以得到：</p>
+<p>$$<br>g_{\theta}*x &#x3D; \sum_{k &#x3D; 0}^{K}{\theta_{k}T_{K}\left( \widetilde{L} \right)x}\ \ \ \ \ \ \ \ \widetilde{L} &#x3D; \frac{2L}{\lambda_{\max{- I_{N} } } }<br>$$</p>
+<p>在实际计算中， 被作者人为限制为$\lambda_{\max\ }$&#x3D;2，作者认为参数可以在训练中忽略这一误差，之后又$设定k &#x3D; 2：$</p>
+<p>$$<br>g_{\theta}*x &#x3D; \sum_{k &#x3D; 0}^{1}{\theta_{k}T_{K}\left( L - I_{N} \right)x &#x3D; \theta_{0}x - \theta_{1}T_{1}\left( L - I_{N} \right)x}<br>$$</p>
+<p>$$<br>&#x3D; \theta_{0}x - \theta_{1}D^{- \frac{1}{2} }AD^{- \frac{1}{2} }x<br>$$</p>
+<p>防止过拟合，又进一步规定二个参数互为相反数：</p>
+<p>$$<br>\theta &#x3D; \theta_{0} &#x3D; - \theta_{1}<br>$$</p>
+<p>从而得到：</p>
+<p>$$<br>g_{\theta}*x &#x3D; \theta_{0}x - \theta_{1}D^{- \frac{1}{2} }AD^{- \frac{1}{2} }x &#x3D; \theta\left( I_{N} + D^{- \frac{1}{2} }AD^{- \frac{1}{2} } \right)x<br>$$</p>
+<p>并为了防止梯度爆炸（因为此时的特征值范围[0,2])，引入了一个自环，</p>
+<p>使得$I_{N} + D^{- \frac{1}{2} }AD^{- \frac{1}{2} } &#x3D; {\widetilde{D} }^{- \frac{1}{2} }\widetilde{A}{\widetilde{D} }^{- \frac{1}{2} }$最终得到了快速卷积公式：</p>
+<p>$$<br>H^{l + 1} &#x3D; \sigma\left( {\widetilde{D} }^{- \frac{1}{2} }\ \widetilde{A}{\widetilde{D} }^{- \frac{1}{2} }H^{l}W^{l} \right)<br>$$</p>
+<p>这里的$W^{l}实际上$是之前的参数$\theta ，$这里写作$W^{l}，$符合卷积神经网络的习惯</p>
+<p>选择了一个两层的半监督节点分类模型：</p>
+<p>$$<br>Z &#x3D; f(X,A) &#x3D; softmax\left( \widehat{A}ReLU\left( \widehat{A}XW^{0} \right)W^{1} \right)<br>$$</p>
+<p>对所有带有标签的节点计算交叉熵：</p>
+<p>$$<br>L &#x3D; - \sum_{l \in Y_{L} }^{}{\sum_{f &#x3D; 1}^{F}{Y_{lf}\ln Z_{lf} } }<br>$$</p>
+<p>$Y_{L}$表示所有带有标签的节点集合，训练过程使用批量梯度下降法。</p>
+<p>由于只需要5%的节点带有标签就可以训练，因此这是一个半监督学习方法。</p>
+<ol>
+<li><p>训练成本：由于图不适合在GPU运行，因此可能需要大量内存，大型图有待进一步优化。</p>
+</li>
+<li><p>有向边和边特征：目前本论文只支持点特征，同时仅限于无向图，但对于有向图可以分解为无向二部图来处理</p>
+</li>
+<li><p>在近似的时候假设了自身节点和邻居同等重要，可以将参数优化为：</p>
+</li>
+</ol>
+<p>$$<br>\widetilde{A} &#x3D; A + \lambda I_{N}<br>$$</p>
+<p>其中$\lambda 是$可以学习的参数，这样可以更进一步拟合。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/08/GCN/" data-id="clop96m8d00003ols080febp1" data-title="GCN.md" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/11/08/GCN/">GCN.md</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
